@@ -19,13 +19,12 @@ const featured = core.getBooleanInput("featured");
 const status = core.getInput("status");
 const requested_status = core.getInput("requested_status");
 const form = new FormData();
-const filesArray = JSON.parse(files);
 const file_parts = [];
-for (const file of filesArray) {
+const filesData = JSON.parse(files).map((file) => {
   const filename = path.basename(file);
-  form.append(filename, fs.createReadStream(file));
   file_parts.push(filename);
-}
+  return { path: file, name: filename };
+});
 const data = {
   project_id,
   version_number,
@@ -48,6 +47,9 @@ Object.keys(data).forEach((key) => {
   }
 });
 form.append("data", JSON.stringify(dataCleaned));
+filesData.forEach((file) => {
+  form.append(file.name, fs.createReadStream(file.path));
+});
 fetch("https://api.modrinth.com/v2/version", {
   method: "POST",
   headers: {

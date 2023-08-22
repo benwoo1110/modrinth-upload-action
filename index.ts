@@ -5,6 +5,11 @@ import fetch from 'node-fetch'
 import path from 'path'
 import fs from 'fs'
 
+interface FileData {
+    path: string
+    name: string
+}
+
 const api_token = core.getInput('api_token')
 const project_id = core.getInput('project_id')
 const version_number = core.getInput('version_number')
@@ -21,13 +26,12 @@ const requested_status = core.getInput('requested_status')
 
 const form = new FormData()
 
-const filesArray = JSON.parse(files)
 const file_parts: string[] = []
-for (const file of filesArray) {
+const filesData: FileData[] = JSON.parse(files).map((file: string) => {
     const filename = path.basename(file)
-    form.append(filename, fs.createReadStream(file))
     file_parts.push(filename)
-}
+    return { path: file, name: filename }
+})
 
 const data = {
     project_id,
@@ -54,6 +58,9 @@ Object.keys(data).forEach(key => {
 })
 
 form.append('data', JSON.stringify(dataCleaned))
+filesData.forEach(file => {
+    form.append(file.name, fs.createReadStream(file.path))
+})
 
 fetch('https://api.modrinth.com/v2/version', {
     method: 'POST',
