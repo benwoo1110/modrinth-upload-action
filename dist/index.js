@@ -33,11 +33,11 @@ const data = {
   changelog,
   dependencies: JSON.parse(dependencies),
   game_versions: game_versions.split(", "),
-  version_type,
+  version_type: version_type.toLowerCase(),
   loaders: loaders.split(", "),
   featured,
-  status,
-  requested_status
+  status: status.toLowerCase(),
+  requested_status: requested_status.toLowerCase()
 };
 const dataCleaned = {};
 Object.keys(data).forEach((key) => {
