@@ -1,0 +1,56 @@
+name: 'Modrinth Upload'
+description: 'Uploads a mod to Modrinth'
+
+branding:
+  icon: 'upload'  
+  color: 'green'
+
+inputs:
+  api_token:
+    description: 'The Modrinth API token'
+    required: true
+  project_id:
+    description: 'The Modrinth project ID'
+    required: true
+  version_number:
+    description: 'The version number. Ideally will follow semantic versioning'
+    required: true
+  files:
+    description: 'The files to upload'
+    required: true
+  name:
+    description: 'The name of this version. Defaults to version number.'
+    required: false
+  changelog:
+    description: 'The changelog for this version. Defaults to "Initial release."'
+    required: false
+  dependencies:
+    description: 'The dependencies for this version. Defaults to none.'
+    required: false
+    default: '[]'
+  game_versions:
+    description: 'The game versions this mod is compatible with'
+    required: true
+    default: '[]'
+  version_type:
+    description: 'The type of version. Defaults to release.'
+    required: false
+    default: 'release'
+  loaders:
+    description: 'The loaders this version is compatible with.'
+    required: false
+    default: '[]'
+  featured:
+    description: 'Whether this version should be featured. Defaults to false.'
+    required: false
+    default: 'false'
+  status:
+    description: 'The status of this version.'
+    required: false
+  requested_status:
+    description: 'The requested status of this version.'
+    required: false
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
